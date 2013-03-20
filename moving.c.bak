@@ -1,0 +1,1072 @@
+
+#include "global.h"
+
+//This function make car just go forward and do nothing
+//Design for Debuging
+
+// This is the basic moving function and there is 4 modes chosing by passing a reference
+// to  mode_no
+//
+u08 Golfer_line_tracking(u08 mode_no, u08 step_local)
+{
+	u08 L_speed, R_speed, tracking_speed;
+	s08 fro_patt, back_patt, drift, defl;
+	s16 diff = 0;
+	u08 flag = 0, STEP_flag = 0;
+	u08 side_ball_detected = 0;
+	u08 STEP = 0;
+	
+	ADC_update();		//check the VR value
+
+	delay_ms(20);
+
+	fro_patt = patt_ana(front_sensor);
+	back_patt = patt_ana(back_sensor);	
+	past_defl = 0;
+	past_front = 0;
+	past_back = 0;
+
+	
+	if (back_patt == NO_LINE || mode_no == FRONT_OBJECT_MODE 
+		|| mode_no == FRONT_L_OBJECT_MODE || mode_no == OBJECT_MODE)  // 
+	{
+		tracking_speed = VR[0] / SPEED_DENOMINATOR_LOW;	
+	}
+	else
+	{
+		tracking_speed = VR[0] / SPEED_DENOMINATOR;		//adjust the tracking speed by the VR
+
+	}
+		
+	while (1)
+	{
+		L_speed = tracking_speed;
+		R_speed = tracking_speed;
+
+		fro_patt = patt_ana(front_sensor);
+		back_patt = patt_ana(back_sensor);
+
+		//if(fro_patt == NO_LINE)
+		//{
+		//	Motor_stop();
+		//	return NO_LINE_STOP * 10 + STEP;
+		//}
+
+		if(fro_patt < 4 &&  fro_patt > -4)   //front sensor value valid
+		{
+			past_front = fro_patt;
+		}
+		else  //front sensor invalid
+		{
+			fro_patt = past_front;	
+		}
+
+		if(back_patt < 4 &&  back_patt > -4)   //back sensor value valid
+		{
+			past_back = back_patt;
+			if (mode_no == CROSS_COUNTER_MODE || mode_no == CROSS_L_COUNTER_MODE
+			|| mode_no == CROSS_R_COUNTER_MODE)
+				tracking_speed = VR[0] / SPEED_DENOMINATOR;	
+		}
+		else  //front sensor invalid
+		{
+			back_patt = past_back;	
+		}
+
+		drift = fro_patt + back_patt;  //for example, when fro = 1, back = -1 (left)
+		defl = fro_patt - back_patt;	//drift = 0, defl = 2.`
+										//another: fro = 1, back = 0
+										//drift = 1, defl = 1
+
+		diff = tracking_speed / 2 * (- 10 * drift - 35 * defl - 400 / tracking_speed * (defl - past_defl));
+
+		L_speed = tracking_speed - diff / 100; 
+		R_speed = tracking_speed;
+
+		Motor_forward(R_speed,  L_speed);
+		past_defl = defl;
+		
+		delay_us(100); // make a little delay 
+		
+		fro_patt = patt_ana(front_sensor); 
+
+/////////////////////////////////////////////////////////////////////////
+		if(mode_no == OBJECT_MODE)
+		{
+			if((middle_sensor & 0b00101000) != 0b00000000)
+			{
+				Motor_stop();
+				return FRONT_OBJECT_STOP * 10 + STEP;
+			}
+
+			if(fro_patt == CROSS_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(fro_patt != CROSS_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}		
+				
+			if (fro_patt == CROSS_ENCOUNTER)
+			{
+				if(Golfer_detection())
+				{
+					side_ball_detected = 1;
+				}
+			}
+
+			if(side_ball_detected == 1)
+			{
+				if (flag == 0 && fro_patt == CROSS_ENCOUNTER)
+				{
+						flag = 1;
+				}
+
+				if (flag == 1 && (middle_sensor & 0b00000011) == 0b00000011)
+				{
+					Motor_stop();
+					Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+					while((middle_sensor & 0b00000011) != 0b00000011)
+					{
+						;
+					}
+					Motor_stop();
+					return SIDE_OBJECT_STOP * 10 + STEP;
+				}				
+								
+			} 	 // end of if side_ball_detected == 1
+			
+					
+		} // end of if mode_no == OBJECT_MODE
+
+//////////////////////////////////////////////////////////////
+		if(mode_no == FRONT_OBJECT_MODE)
+		{
+			if((middle_sensor & 0b00101000) != 0b00000000)
+			{
+				Motor_stop();
+				return FRONT_OBJECT_STOP * 10 + STEP;
+			}
+
+			if(fro_patt == CROSS_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(fro_patt != CROSS_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}						
+		} // end of front_object_mode
+
+/////////////////////////////////////////////////////////////////
+
+		if(mode_no == FRONT_L_OBJECT_MODE)
+		{
+			if((middle_sensor & 0b00101000) != 0b00000000)
+			{
+				Motor_stop();
+				return FRONT_OBJECT_STOP * 10 + STEP;
+			}
+
+			if(fro_patt == LEFT_T_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(fro_patt != LEFT_T_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}
+		}	// end of FRONT_L_OBJECT_MODE
+
+////////////////////////////
+
+
+///////////////////////////////////////////////////////////
+		if(mode_no == CROSS_COUNTER_MODE)
+		{
+			if(fro_patt == CROSS_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(fro_patt != CROSS_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}				
+		}
+///////////////////////////////////////////////////////////////
+
+		if(mode_no == CROSS_L_COUNTER_MODE)
+		{
+			if(fro_patt == LEFT_T_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(fro_patt != LEFT_T_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}			
+		}
+		if(mode_no == CROSS_R_COUNTER_MODE)
+		{
+			if(fro_patt == RIGHT_T_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(fro_patt != RIGHT_T_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}			
+		}
+////////////////////////////////////////////////////////////////
+
+		if (step_local == STEP)
+		{
+			STEP_flag = 2;
+			if (flag == 0 && (((mode_no == FRONT_OBJECT_MODE || mode_no == CROSS_COUNTER_MODE || mode_no == OBJECT_MODE) && fro_patt == CROSS_ENCOUNTER) 
+				|| ((mode_no == FRONT_L_OBJECT_MODE ||  mode_no == CROSS_L_COUNTER_MODE) && fro_patt == LEFT_T_ENCOUNTER)
+				|| ((mode_no == CROSS_R_COUNTER_MODE) && fro_patt == RIGHT_T_ENCOUNTER)))
+			{
+				flag = 1;
+			}
+
+			if (flag == 1 && (((mode_no == FRONT_OBJECT_MODE || mode_no == CROSS_COUNTER_MODE || mode_no == OBJECT_MODE) && (middle_sensor & 0b00000011) == 0b00000011)
+			 || ((mode_no == FRONT_L_OBJECT_MODE ||  mode_no == CROSS_L_COUNTER_MODE) && (middle_sensor & 0b00000011) != 0b00000000)
+			 || ((mode_no == CROSS_R_COUNTER_MODE) && (middle_sensor & 0b00000011) != 0b00000000)))
+			{
+				delay_ms(20);
+				Motor_stop();
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000011) == 0b0000000)
+				{
+					;
+				}
+				Motor_stop();
+				return STEP_STOP * 10 + STEP;
+			}			
+		} // end of if step_local == STEP
+				
+#if 0
+		if(mode_no == CROSS_MODE)
+		{			
+			if (flag == 0 && patt_ana(front_sensor) == CROSS_ENCOUNTER)
+			{
+				flag = 1;
+			}
+
+			if (flag == 1 && (middle_sensor & 0b00000011) == 0b00000011)
+			{
+				delay_ms(20);
+				Motor_stop();
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000011) != 0b00000011)
+				{
+					;
+				}
+				Motor_stop();
+				break;
+			}
+		}
+
+		if(mode_no == CROSS_L_MODE)				//tracking to the end of line at left sides 
+		{
+			if (flag == 0 && patt_ana(front_sensor) == LEFT_T_ENCOUNTER)
+			{
+				flag = 1;
+				tracking_speed = VR[0] / SPEED_DENOMINATOR_LOW;	
+			}
+
+			if (flag == 1 && (middle_sensor & 0b00000010) == 0b00000010)
+			{
+				flag = 2;
+			}
+				
+			if (flag == 2 && (middle_sensor & 0b00000010) != 0b00000010)
+			{
+				Motor_stop();
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000010) != 0b00000010)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+			}
+
+			if (flag == 1 && patt_ana(back_sensor) == LEFT_T_ENCOUNTER)
+			{
+				Motor_stop();
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000010) != 0b00000010)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+			}
+		}
+
+		if(mode_no == CROSS_R_MODE)				//tracking to the end of line at right sides 
+		{
+			if (flag == 0 && patt_ana(front_sensor) == RIGHT_T_ENCOUNTER)
+			{
+				flag = 1;
+				tracking_speed = VR[0] / SPEED_DENOMINATOR_LOW;	
+			}
+
+			if (flag == 1 && (middle_sensor & 0b00000001) == 0b00000001)
+			{
+				flag = 2;
+			}
+				
+			if (flag == 2 && (middle_sensor & 0b00000001) != 0b00000001)
+			{
+				Motor_stop();
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000001) != 0b00000001)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+				
+			}
+
+			if (flag == 1 && patt_ana(back_sensor) == RIGHT_T_ENCOUNTER)
+			{
+				Motor_stop();
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000001) != 0b00000001)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+			}
+		}
+
+		/////////////break condition detection/////////////////////
+			switch(mode_no)
+			{
+		 		case OBJECT_MODE:				//object sensor detecting mode
+					if((middle_sensor & 0b00101000) != 0b00000000)
+					{
+						Motor_stop();
+						return;
+					} 
+					break;
+
+				default: break;
+			}
+#endif
+	} // end of while loop
+	Motor_stop();
+}
+
+void Golfer_line_back(u08 mode_no, u08 step_local)
+{
+	u08 L_speed, R_speed, tracking_speed;
+	s08 fro_patt, back_patt, drift, defl;
+	s16 diff = 0;
+	u08 flag = 0;
+	u08 STEP = 0, STEP_flag = 0;
+
+	fro_patt = patt_ana(front_sensor);
+	back_patt = patt_ana(back_sensor);	
+	past_defl = 0;
+	past_front = 0;
+	past_back = 0;
+	
+	if(back_patt == NO_LINE || mode_no == BACK_CROSS_MODE || BACK_CROSS_R_COUNTER_MODE)
+		tracking_speed = VR[0] / SPEED_DENOMINATOR_LOW;
+	else
+		tracking_speed = VR[0] / SPEED_DENOMINATOR;
+
+	if (mode_no == BACK_CROSS_L_COUNTER_MODE || mode_no == BACK_CROSS_R_COUNTER_MODE)
+		Golfer_turn_adjust();
+
+	while (1)
+	{
+		L_speed = tracking_speed;
+		R_speed = tracking_speed;
+
+		fro_patt = patt_ana(front_sensor);
+		back_patt = patt_ana(back_sensor);
+
+		//if(back_patt == NO_LINE)
+		//{
+		//	Motor_stop();
+		//	return;
+		//}
+
+		if(fro_patt < 4 &&  fro_patt > -4)   //front sensor value valid
+		{
+			past_front = fro_patt;
+			if(mode_no == BACK_CROSS_COUNTER_MODE)
+				tracking_speed = VR[0] / SPEED_DENOMINATOR;
+		}
+		else  //front sensor invalid
+		{
+			fro_patt = past_front;	
+		}
+
+		if(back_patt < 4 &&  back_patt > -4)   //back sensor value valid
+		{
+			past_back = back_patt;
+		}
+		else  //front sensor invalid
+		{
+			back_patt = past_back;	
+		}
+
+		drift = fro_patt + back_patt;  
+		defl = back_patt - fro_patt;	
+
+
+		diff = tracking_speed / 2 * (- 10 * drift - 35 * defl - 400 / tracking_speed * (defl - past_defl));
+		//diff = tracking_speed / 2 * (- 5 * drift - 30 * defl - 15 * (defl - past_defl));
+		//diff = tracking_speed / 2 * (- 10 * drift - 35 * defl - 22 * (defl - past_defl));
+
+		L_speed = tracking_speed - diff / 100; 
+		R_speed = tracking_speed;
+
+		Motor_backward(R_speed,  L_speed);
+		past_defl = defl;
+		delay_us(100); // make a little delay  
+
+		back_patt = patt_ana(back_sensor);
+
+
+		if(mode_no == BACK_CROSS_MODE)
+		{			
+
+			if ((middle_sensor & 0b00000011) == 0b00000011)
+			{
+				Motor_stop();
+				Motor_forward(VR[0] / ADJUST_SPEED_DENOMINATOR + 1, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000011) != 0b00000011)
+				{
+					;
+				}
+				while((middle_sensor & 0b00000011) == 0b00000011)
+				{
+					;
+				}
+				Motor_stop();
+				break;
+			}
+		}
+		
+//////////////////////////////////////////////////////////		
+		if(mode_no == BACK_CROSS_L_COUNTER_MODE)
+		{
+			if(back_patt == LEFT_T_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(back_patt != LEFT_T_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}			
+		}	
+/////////////////////////////////////////////////////////////
+		if(mode_no == BACK_CROSS_R_COUNTER_MODE)
+		{
+			if(back_patt == RIGHT_T_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(back_patt != RIGHT_T_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}				
+		}		
+/////////////////////////////////////////////////////////////
+		if(mode_no == BACK_CROSS_COUNTER_MODE)
+		{
+			if(back_patt == CROSS_ENCOUNTER && STEP_flag == 0)
+			{
+				STEP_flag = 1;
+				STEP++;
+			}
+
+			if(back_patt != CROSS_ENCOUNTER && STEP_flag == 1)
+			{
+				STEP_flag = 0;
+			}				
+		}
+/////////////////////////////////////////////////////////////////////////////		
+		if (step_local == STEP)
+		{
+			STEP_flag = 2;
+			if (flag == 0 && ((mode_no == BACK_CROSS_COUNTER_MODE && back_patt == CROSS_ENCOUNTER) 
+				|| (mode_no == BACK_CROSS_L_COUNTER_MODE && back_patt == LEFT_T_ENCOUNTER)
+				|| (mode_no == BACK_CROSS_R_COUNTER_MODE && back_patt == RIGHT_T_ENCOUNTER)))
+			{
+				flag = 1;
+			}
+
+			if (flag == 1 && ((mode_no == BACK_CROSS_COUNTER_MODE && (middle_sensor & 0b00000011) == 0b00000011)
+			 || (mode_no == BACK_CROSS_L_COUNTER_MODE && (middle_sensor & 0b00000011) != 0b00000000)
+			 || (mode_no == BACK_CROSS_R_COUNTER_MODE && (middle_sensor & 0b00000011) != 0b00000000)))
+			{
+				Motor_stop();
+				Motor_forward(VR[0] / ADJUST_SPEED_DENOMINATOR + 1, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000011) == 0b0000000)
+				{
+					;
+				}
+				while((middle_sensor & 0b00000011) != 0b0000000)
+				{
+					;
+				}
+				Motor_backward(VR[0] / ADJUST_SPEED_DENOMINATOR, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000011) == 0b0000000)
+				{
+					;
+				}
+				Motor_stop();
+				return;
+			}			
+		} // end of if step == STEP
+//////////////////////////////////////////////////////////////////				
+#if 0
+		if(mode_no == BACK_CROSS_L_COUNTER_MODE)				//tracking to the end of line at left sides 
+		{
+			if (flag == 0 && patt_ana(back_sensor) == LEFT_T_ENCOUNTER)
+			{
+				flag = 1;
+			}
+
+			if (flag == 1 && (middle_sensor & 0b00000010) == 0b00000010)
+			{
+				Motor_stop();
+				Motor_forward(VR[0] / ADJUST_SPEED_DENOMINATOR + 1, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000010) != 0b00000010)
+				{
+					;
+				}
+				while((middle_sensor & 0b00000010) == 0b00000010)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+			}
+
+			if (flag == 1 && patt_ana(front_sensor) == LEFT_T_ENCOUNTER)
+			{
+				Motor_stop();
+				Motor_forward(VR[0] / ADJUST_SPEED_DENOMINATOR + 1, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000010) != 0b00000010)
+				{
+					;
+				}
+				while((middle_sensor & 0b00000010) == 0b00000010)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+			}
+		}
+
+		if(mode_no == CROSS_R_MODE)				//tracking to the end of line at right sides 
+		{
+			if (flag == 0 && patt_ana(back_sensor) == RIGHT_T_ENCOUNTER)
+			{
+				flag = 1;
+			}
+				
+			if (flag == 1 && (middle_sensor & 0b00000001) == 0b00000001)
+			{
+				Motor_stop();
+				Motor_forward(VR[0] / ADJUST_SPEED_DENOMINATOR + 1, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000001) != 0b00000001)
+				{
+					;
+				}
+				while((middle_sensor & 0b00000001) == 0b00000001)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+				
+			}
+
+			if (flag == 1 && patt_ana(front_sensor) == RIGHT_T_ENCOUNTER)
+			{
+				Motor_stop();
+				Motor_forward(VR[0] / ADJUST_SPEED_DENOMINATOR + 1, VR[0] / ADJUST_SPEED_DENOMINATOR);
+				while((middle_sensor & 0b00000001) != 0b00000001)
+				{
+					;
+				}
+				while((middle_sensor & 0b00000001) == 0b00000001)
+				{
+					;
+				}
+				Motor_stop();
+				Golfer_turn_adjust();
+				break;
+			}
+		}
+#endif		
+	}  ///end of while statement
+	Motor_stop();
+}	
+
+//--------------------------------------------------------------------------------
+s08 patt_ana(u08 sensor_patt)  //positive: left shift
+{
+	s08 shift;
+	switch(sensor_patt)
+	{
+	case 0b00000000:
+		shift = NO_LINE;
+		break;
+
+	case 0b00111100:
+	case 0b00011000:
+	case 0b00001000:
+	case 0b00010000:
+		shift = NO_SHIFT;
+		break;
+
+	case 0b01111000:
+	case 0b00111000:
+	case 0b00110000:
+	case 0b00100000:
+		shift = SMALL_SHIFT_RIGHT;
+		break;
+
+	case 0b00011110:
+	case 0b00011100:
+	case 0b00001100:
+	case 0b00000100:				
+		shift = SMALL_SHIFT_LEFT;
+		break;
+
+
+	case 0b01110000:		
+	case 0b01100000:
+	case 0b01000000:
+		shift = MEDIUM_SHIFT_RIGHT;
+		break;
+
+	case 0b00001110:
+	case 0b00000110:
+	case 0b00000010:
+		shift = MEDIUM_SHIFT_LEFT;
+		break;
+
+	case 0b10000000:
+	case 0b11000000:
+	case 0b11100000:
+		shift = LARGE_SHIFT_RIGHT;
+		break;
+
+	case 0b00000111:
+	case 0b00000011:
+	case 0b00000001:
+		shift = LARGE_SHIFT_LEFT;
+		break;
+
+	case 0b01111110:
+	case 0b11111111:
+	case 0b01111111:
+	case 0b11111110:
+		shift = CROSS_ENCOUNTER;
+		break;
+	
+	case 0b11110000:	
+	case 0b11111000:
+	case 0b11111100:
+		shift = LEFT_T_ENCOUNTER;
+		break;
+
+	case 0b00001111:	
+	case 0b00011111:
+	case 0b00111111:
+		shift = RIGHT_T_ENCOUNTER;
+		break;
+
+	default:
+		shift = INVALID_SHIFT;
+		break;
+	} // end of switch
+	
+	return shift;			
+}
+
+//--------------------------------------------------------------------------------
+// call the turning functions
+// Motor_stop function included
+void Golfer_turn_left()
+{
+	u08 L_speed, R_speed, tracking_speed;
+	ADC_update();		//check the VR value
+	tracking_speed = VR[0] / ADJUST_SPEED_DENOMINATOR;
+	
+	while((middle_sensor & 0b00000011) != 0)
+	{
+		Motor_forward(tracking_speed + 1, tracking_speed);
+	}
+	Motor_stop();
+
+	while((middle_sensor & 0b00000011) == 0)
+	{
+		Motor_backward(tracking_speed, tracking_speed);
+	}
+	Motor_stop();
+	Golfer_turn_adjust();
+	tracking_speed = VR[0]/SPEED_TURNING_DENOMINATOR;
+	L_speed = R_speed = tracking_speed;
+	Motor_TurnLeft(L_speed, R_speed);		//motor.c
+	while(1)
+	{
+		if(front_sensor==0b00000000 || front_sensor==0b10000000 || front_sensor==0b10000001)
+		break;
+	}
+	while(1)
+	{
+		if(front_sensor == 0b00111000)
+		{
+			break;
+		}
+	}
+	Motor_stop();
+	tracking_speed = VR[0] / ADJUST_SPEED_DENOMINATOR;
+	Motor_forward(tracking_speed + 1, tracking_speed);
+	while((middle_sensor & 0b00000011) != 0);
+	Motor_stop();
+	Motor_backward(tracking_speed, tracking_speed);
+	while((middle_sensor & 0b00000011) == 0);
+	Motor_stop();
+
+	Golfer_turn_adjust();
+	Golfer_direction_add(1);
+	
+}
+////////////////////
+
+
+void Golfer_turn_right()
+{
+	u08 L_speed, R_speed, tracking_speed;
+	ADC_update();		//check the VR value
+	tracking_speed = VR[0] / ADJUST_SPEED_DENOMINATOR;
+	
+	while((middle_sensor & 0b00000011) != 0)
+	{
+		Motor_forward(tracking_speed + 1, tracking_speed);
+	}
+	Motor_stop();
+
+	while((middle_sensor & 0b00000011) == 0)
+	{
+		Motor_backward(tracking_speed, tracking_speed);
+	}
+	Motor_stop();
+	Golfer_turn_adjust();
+	tracking_speed = VR[0]/SPEED_TURNING_DENOMINATOR;
+	L_speed = tracking_speed;
+	R_speed = tracking_speed;
+	Motor_TurnRight(L_speed, R_speed);	//motor.c
+	while(1)
+	{
+		if(front_sensor==0b00000000 || front_sensor==0b00000001)
+
+		{
+			break;
+		}
+	}
+	while(1)
+	{
+		if(front_sensor==0b00011100 || front_sensor==0b00111000)
+		{
+			
+			break;
+		}
+	}
+
+	Motor_stop();
+	tracking_speed = VR[0] / ADJUST_SPEED_DENOMINATOR;
+	Motor_forward(tracking_speed + 1, tracking_speed);
+	while((middle_sensor & 0b00000011) != 0);
+	Motor_stop();
+	Motor_backward(tracking_speed, tracking_speed);
+	while((middle_sensor & 0b00000011) == 0);
+	Motor_stop();
+	Golfer_turn_adjust();
+	Golfer_direction_add(3);			// -1
+}
+
+void Golfer_turn_back()
+{
+	u08 L_speed, R_speed, tracking_speed;
+	ADC_update();		//check the VR value
+	tracking_speed = VR[0]/SPEED_TURNING_DENOMINATOR;
+	L_speed = R_speed = tracking_speed;
+	Motor_TurnRight(L_speed, R_speed);	//motor.c
+
+	while(1)
+	{
+		if(front_sensor==0b00000000 || front_sensor==0b00000001)
+	
+		break;
+	}
+	while(1)
+	{
+		if(front_sensor==0b00111000 || front_sensor==0b00011100 || front_sensor==0b00111100)
+		break;
+	}
+	while(1)
+	{
+		if(front_sensor==0b00000000 || front_sensor==0b00000001 || front_sensor==0b00000011)
+	
+		break;
+	}
+	while(1)
+	{
+		if((front_sensor==0b00111000) || (front_sensor==0b00011100))
+		break;
+	}
+	Motor_stop();
+	Golfer_turn_adjust();
+	Golfer_direction_add(2);
+}
+
+
+void Golfer_backward_p(void)
+{
+	u08 L_speed, R_speed, tracking_speed;
+	ADC_update();		//check the VR value
+	tracking_speed = VR[0]/ADJUST_SPEED_DENOMINATOR;
+		L_speed = tracking_speed;
+		R_speed = tracking_speed;
+		Motor_backward(L_speed, R_speed);		//motor.c
+		while((middle_sensor & 0b00101000) != 0b00000000)
+		{
+			;
+		}
+	Motor_stop();
+	return;
+}
+
+
+void Golfer_forward_p(int delay)
+{
+		u08 L_speed, R_speed, tracking_speed;
+	ADC_update();		//check the VR value
+	tracking_speed = VR[0]/SPEED_DENOMINATOR;
+
+		L_speed = tracking_speed;
+		R_speed = tracking_speed;
+		Motor_forward(L_speed, R_speed);		//motor.c
+		delay_ms(delay);
+	Motor_stop();
+	return;
+}
+
+//	define and change the direction
+//	East: 0
+//  North: 1
+//	West: 2
+//  South: 3
+void Golfer_direction_add(int v)
+{
+	int i;
+	for(i=0;i<v;i++)
+	{
+		direction++;
+		if(direction>=4)
+			direction = 0;	
+	}
+}
+// Call this function to turn to direction d
+void Golfer_turnto(int d)
+{
+	switch (d-direction)
+	{
+	default:	break;
+	case 0:	
+			return; break; 
+	case 1:
+	case -3:
+			Golfer_turn_left(0);
+			break;
+	case -2:
+	case 2: 
+			Golfer_turn_back(0);
+			break;
+	case 3:
+	case -1: 
+			Golfer_turn_right(0);
+			break;
+	}
+}
+ 
+
+void Golfer_turn_adjust(void)
+{	u08 L_speed, R_speed, tracking_speed;
+	s08 fro_patt, back_patt, defl;
+
+	tracking_speed = VR[0] / SPEED_TURNING_DENOMINATOR;
+	L_speed = tracking_speed;
+	R_speed = tracking_speed;
+	
+	fro_patt = patt_ana(front_sensor);
+	back_patt = patt_ana(back_sensor);
+
+
+	if(fro_patt < 4 &&  fro_patt > -4)   //front sensor value valid
+	{
+	}
+	else  //front sensor invalid
+	{
+		return;	
+	}
+	
+	if(back_patt < 4 &&  back_patt > -4)   //back sensor value valid
+	{
+	}
+	else  //front sensor invalid
+	{
+		return;	
+	}
+
+	defl = fro_patt - back_patt;
+
+	if(defl < 0) // left deflection
+	{
+		Motor_TurnLeft(L_speed, R_speed);
+	}
+
+	if(defl > 0) //right deflection
+	{
+		Motor_TurnRight(L_speed, R_speed);
+	}
+
+	while(1)
+	{
+		fro_patt = patt_ana(front_sensor);
+		back_patt = patt_ana(back_sensor);
+
+
+		if(fro_patt < 4 &&  fro_patt > -4)   //front sensor value valid
+		{
+			;
+		}
+		else  //front sensor invalid
+		{
+			return;
+		}
+	
+		if(back_patt < 4 &&  back_patt > -4)   //back sensor value valid
+		{
+			;
+		}
+		else  //front sensor invalid
+		{
+			return;
+		}
+
+		defl = fro_patt - back_patt;
+		
+		if (defl == 0)
+			break;
+	}
+	Motor_stop();
+
+	tracking_speed = VR[0] / ADJUST_SPEED_DENOMINATOR;
+	L_speed = tracking_speed;
+	R_speed = tracking_speed;
+
+	fro_patt = patt_ana(front_sensor);
+	back_patt = patt_ana(back_sensor);
+
+
+	if(fro_patt < 4 &&  fro_patt > -4)   //front sensor value valid
+	{
+	}
+	else  //front sensor invalid
+	{
+		return;	
+	}
+	
+	if(back_patt < 4 &&  back_patt > -4)   //back sensor value valid
+	{
+	}
+	else  //front sensor invalid
+	{
+		return;	
+	}
+
+	defl = fro_patt - back_patt;
+
+	if(defl < 0) // left deflection
+	{
+		Motor_TurnLeft(L_speed, R_speed);
+	}
+
+	if(defl > 0) //right deflection
+	{
+		Motor_TurnRight(L_speed, R_speed);
+	}
+
+	while(1)
+	{
+		fro_patt = patt_ana(front_sensor);
+		back_patt = patt_ana(back_sensor);
+
+
+		if(fro_patt < 4 &&  fro_patt > -4)   //front sensor value valid
+		{
+			;
+		}
+		else  //front sensor invalid
+		{
+			return;
+		}
+	
+		if(back_patt < 4 &&  back_patt > -4)   //back sensor value valid
+		{
+			;
+		}
+		else  //front sensor invalid
+		{
+			return;
+		}
+
+		defl = fro_patt - back_patt;
+		
+		if (defl == 0)
+			break;
+	}
+	Motor_stop();
+}	

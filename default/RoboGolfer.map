@@ -1,0 +1,744 @@
+Archive member included because of file (symbol)
+
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+                              lcd.o (__udivmodqi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+                              lcd.o (__udivmodhi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+                              moving.o (__divmodhi4)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                              c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o (exit)
+c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                              main.o (__do_clear_bss)
+
+Allocating common symbols
+Common symbol       size              file
+
+sequence            0x1               main.o
+Map                 0x31              main.o
+lcd_print_data      0x10              lcd.o
+VY                  0x1               main.o
+position_x          0x1               main.o
+middle_sensor       0x1               main.o
+Map_set             0x1               main.o
+VR                  0x2               main.o
+detection_flag      0x1               main.o
+direction           0x1               main.o
+past_front          0x1               main.o
+Ball_left           0x1               main.o
+VX                  0x1               main.o
+result_flag         0x1               main.o
+joypad_switch       0x1               main.o
+past_defl           0x1               main.o
+Ball                0x1               main.o
+back_sensor         0x1               main.o
+LCD_menu_update_flag
+                    0x1               main.o
+R_motor_speed       0x1               main.o
+temp_x              0x1               main.o
+position_y          0x1               main.o
+front_sensor        0x1               main.o
+shooted_ball        0x1               main.o
+lcd_binary_data     0x8               lcd.o
+result              0x1               main.o
+step                0x1               main.o
+pwm_duty            0x10              main.o
+past_back           0x1               main.o
+L_motor_speed       0x1               main.o
+LCD_menu_selection  0x1               main.o
+motor_dir           0x1               main.o
+temp_y              0x1               main.o
+IR                  0x1               main.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+text             0x00000000         0x00020000         xr
+data             0x00800060         0x0000ffa0         rw !x
+eeprom           0x00810000         0x00010000         rw !x
+fuse             0x00820000         0x00000400         rw !x
+lock             0x00830000         0x00000400         rw !x
+signature        0x00840000         0x00000400         rw !x
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+LOAD main.o
+LOAD timer.o
+LOAD motor.o
+LOAD databus.o
+LOAD delay.o
+LOAD adc.o
+LOAD lcd.o
+LOAD servo.o
+LOAD taskscheduler.o
+LOAD joypad.o
+LOAD logic.o
+LOAD map.o
+LOAD moving.o
+LOAD golfer.o
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5\libc.a
+LOAD c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a
+
+.hash
+ *(.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rela.init
+ *(.rela.init)
+
+.rel.text
+ *(.rel.text)
+ *(.rel.text.*)
+ *(.rel.gnu.linkonce.t*)
+
+.rela.text
+ *(.rela.text)
+ *(.rela.text.*)
+ *(.rela.gnu.linkonce.t*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rela.fini
+ *(.rela.fini)
+
+.rel.rodata
+ *(.rel.rodata)
+ *(.rel.rodata.*)
+ *(.rel.gnu.linkonce.r*)
+
+.rela.rodata
+ *(.rela.rodata)
+ *(.rela.rodata.*)
+ *(.rela.gnu.linkonce.r*)
+
+.rel.data
+ *(.rel.data)
+ *(.rel.data.*)
+ *(.rel.gnu.linkonce.d*)
+
+.rela.data
+ *(.rela.data)
+ *(.rela.data.*)
+ *(.rela.gnu.linkonce.d*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rela.ctors
+ *(.rela.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rela.dtors
+ *(.rela.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rela.got
+ *(.rela.got)
+
+.rel.bss
+ *(.rel.bss)
+
+.rela.bss
+ *(.rela.bss)
+
+.rel.plt
+ *(.rel.plt)
+
+.rela.plt
+ *(.rela.plt)
+
+.text           0x00000000     0x280e
+ *(.vectors)
+ .vectors       0x00000000       0x54 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+                0x00000000                __vectors
+                0x00000000                __vector_default
+ *(.vectors)
+ *(.progmem.gcc*)
+ *(.progmem*)
+                0x00000054                . = ALIGN (0x2)
+                0x00000054                __trampolines_start = .
+ *(.trampolines)
+ .trampolines   0x00000054        0x0 linker stubs
+ *(.trampolines*)
+                0x00000054                __trampolines_end = .
+ *(.jumptables)
+ *(.jumptables*)
+ *(.lowtext)
+ *(.lowtext*)
+                0x00000054                __ctors_start = .
+ *(.ctors)
+                0x00000054                __ctors_end = .
+                0x00000054                __dtors_start = .
+ *(.dtors)
+                0x00000054                __dtors_end = .
+ SORT(*)(.ctors)
+ SORT(*)(.dtors)
+ *(.init0)
+ .init0         0x00000054        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+                0x00000054                __init
+ *(.init0)
+ *(.init1)
+ *(.init1)
+ *(.init2)
+ .init2         0x00000054        0xc c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+ *(.init2)
+ *(.init3)
+ *(.init3)
+ *(.init4)
+ .init4         0x00000060       0x10 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x00000060                __do_clear_bss
+ *(.init4)
+ *(.init5)
+ *(.init5)
+ *(.init6)
+ *(.init6)
+ *(.init7)
+ *(.init7)
+ *(.init8)
+ *(.init8)
+ *(.init9)
+ .init9         0x00000070        0x8 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+ *(.init9)
+ *(.text)
+ .text          0x00000078        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+                0x00000078                __vector_1
+                0x00000078                __vector_12
+                0x00000078                __bad_interrupt
+                0x00000078                __vector_3
+                0x00000078                __vector_11
+                0x00000078                __vector_13
+                0x00000078                __vector_17
+                0x00000078                __vector_19
+                0x00000078                __vector_4
+                0x00000078                __vector_9
+                0x00000078                __vector_2
+                0x00000078                __vector_15
+                0x00000078                __vector_8
+                0x00000078                __vector_14
+                0x00000078                __vector_10
+                0x00000078                __vector_16
+                0x00000078                __vector_18
+                0x00000078                __vector_20
+ .text          0x0000007c       0x64 main.o
+                0x0000007c                IO_init
+                0x00000096                inherent_function
+                0x000000c0                main
+ .text          0x000000e0       0x28 timer.o
+                0x000000e0                Timer1_init
+ .text          0x00000108      0x1ca motor.o
+                0x00000182                Motor_TurnLeft
+                0x000001c0                __vector_6
+                0x000001be                Motor_adjust
+                0x000001a0                Motor_TurnRight
+                0x000002b6                Motor_stop
+                0x00000108                set_motor_dir
+                0x00000164                Motor_backward
+                0x00000146                Motor_forward
+ .text          0x000002d2       0xf0 databus.o
+                0x000002e0                Motor_update
+                0x000002fe                Sensor_front_update
+                0x0000039a                Sensor_back_update
+                0x000002d2                Databus_clear
+                0x000003ae                Sensor_middle_update
+ .text          0x000003c2       0x48 delay.o
+                0x000003ec                delay_250ms
+                0x000003c2                delay_us
+                0x000003d6                delay_ms
+ .text          0x0000040a       0x4e adc.o
+                0x00000414                ADC_update
+                0x00000446                IR_update
+                0x0000040a                ADC_init
+ .text          0x00000458      0x43c lcd.o
+                0x000006e4                print_data
+                0x0000061a                LCD_menu1_line2
+                0x000007f4                LCD_init
+                0x00000732                LCD_data_update
+                0x000004f6                u16toStr
+                0x00000790                LCD_update
+                0x0000068a                LCD_menu_update
+                0x00000574                LCD_write
+                0x00000486                u08tobinary
+                0x000004ae                u08toStr
+                0x000007e6                LCD_home
+                0x00000652                LCD_menu1_line1
+                0x000005e2                LCD_menu2_line1
+                0x00000458                lcd_write_4b
+                0x0000059c                LCD_menu2_line2
+ .text          0x00000894      0x2e6 servo.o
+                0x00000986                Cannon_stop
+                0x00000ab4                Hand_up_slow
+                0x00000a52                Cannon_down
+                0x000009e2                Cannon_ready
+                0x000009aa                Cannon_up_special
+                0x00000ae6                Hand_up
+                0x000008ec                Cannon_shoot_only
+                0x0000093e                Hand_up_special2
+                0x00000a6c                Hand_drop
+                0x000008fa                __vector_7
+                0x00000972                Hand_ready1
+                0x00000b40                Hand_close
+                0x00000894                Servo_init
+                0x00000a80                Hand_down
+                0x00000a9a                Hand_up_2
+                0x00000b00                Hand_pre_open
+                0x00000b20                Hand_open
+                0x0000099a                Cannon_move
+                0x00000a1a                Cannon_down_slow
+                0x00000b60                Cannon_shoot
+                0x00000952                Hand_up_special
+ .text          0x00000b7a       0xf6 taskscheduler.o
+                0x00000b7a                __vector_5
+ .text          0x00000c70       0xee joypad.o
+                0x00000c70                update_switch
+                0x00000cd6                get_switch
+ .text          0x00000d5e      0x970 logic.o
+                0x00001698                demo_3
+                0x000012a6                logic_part1
+                0x00000d5e                logic_part2
+                0x000016c8                test_mode
+ .text          0x000016ce      0x150 map.o
+                0x00001794                Map_setposition_back
+                0x000017d4                Map_setposition_front
+                0x000016ea                Map_setpoint
+                0x00001814                Map_setgolfer
+                0x000016ce                Map_init
+ .text          0x0000181e      0xb88 moving.o
+                0x00001d90                line_backward_BACK_TO_GRID
+                0x00001cf0                Golfer_turn_right
+                0x00001b40                Golfer_turn_right_corner
+                0x00001b70                Golfer_turn_left_special
+                0x00001d24                Golfer_turn_back
+                0x00001b10                Golfer_turn_right_inverse
+                0x0000192a                Golfer_backward_p2
+                0x000019f6                no_line_forward
+                0x00001bc4                Golfer_turn_left_corner
+                0x00001dfc                line_tracking_OUT_GRID
+                0x0000181e                patt_ana
+                0x00001a38                Golfer_forward_p
+                0x00001aac                Golfer_turn_right_special
+                0x0000195a                Golfer_backward_p
+                0x00001bfc                defl_adjust
+                0x00001986                no_line_backward
+                0x00001e4e                line_tracking_INTO_GRID
+                0x00001a68                Golfer_turn_right_edge
+                0x000020dc                line_tracking
+                0x00001eac                line_backward
+                0x00001d5c                Golfer_turn_left
+ .text          0x000023a6      0x3fe golfer.o
+                0x00002634                Golfer_pickup_front
+                0x0000269a                Golfer_pickup_only
+                0x00002408                Golfer_turnto
+                0x00002790                Golfer_detection
+                0x000024c4                Golfer_shoot
+                0x00002726                Golfer_drop
+                0x000025f6                Golfer_pickup_fast
+                0x000026ec                Golfer_pickup_special
+                0x000023e4                Golfer_adjust_right
+                0x000023a6                Golfer_init
+                0x000023c0                Golfer_adjust_left
+                0x00002470                Golfer_sendball
+ .text          0x000027a4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+ .text          0x000027a4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+ .text          0x000027a4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+ .text          0x000027a4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text          0x000027a4        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x000027a4                . = ALIGN (0x2)
+ *(.text.*)
+ .text.libgcc   0x000027a4       0x18 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+                0x000027a4                __udivmodqi4
+ .text.libgcc   0x000027bc       0x28 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+                0x000027bc                __udivmodhi4
+ .text.libgcc   0x000027e4       0x26 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+                0x000027e4                __divmodhi4
+                0x000027e4                _div
+ .text.libgcc   0x0000280a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .text.libgcc   0x0000280a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+                0x0000280a                . = ALIGN (0x2)
+ *(.fini9)
+ .fini9         0x0000280a        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+                0x0000280a                exit
+                0x0000280a                _exit
+ *(.fini9)
+ *(.fini8)
+ *(.fini8)
+ *(.fini7)
+ *(.fini7)
+ *(.fini6)
+ *(.fini6)
+ *(.fini5)
+ *(.fini5)
+ *(.fini4)
+ *(.fini4)
+ *(.fini3)
+ *(.fini3)
+ *(.fini2)
+ *(.fini2)
+ *(.fini1)
+ *(.fini1)
+ *(.fini0)
+ .fini0         0x0000280a        0x4 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ *(.fini0)
+                0x0000280e                _etext = .
+
+.data           0x00800060        0x0 load address 0x0000280e
+                0x00800060                PROVIDE (__data_start, .)
+ *(.data)
+ .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+ .data          0x00800060        0x0 main.o
+ .data          0x00800060        0x0 timer.o
+ .data          0x00800060        0x0 motor.o
+ .data          0x00800060        0x0 databus.o
+ .data          0x00800060        0x0 delay.o
+ .data          0x00800060        0x0 adc.o
+ .data          0x00800060        0x0 lcd.o
+ .data          0x00800060        0x0 servo.o
+ .data          0x00800060        0x0 taskscheduler.o
+ .data          0x00800060        0x0 joypad.o
+ .data          0x00800060        0x0 logic.o
+ .data          0x00800060        0x0 map.o
+ .data          0x00800060        0x0 moving.o
+ .data          0x00800060        0x0 golfer.o
+ .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+ .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+ .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+ .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .data          0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ *(.data*)
+ *(.rodata)
+ *(.rodata*)
+ *(.gnu.linkonce.d*)
+                0x00800060                . = ALIGN (0x2)
+                0x00800060                _edata = .
+                0x00800060                PROVIDE (__data_end, .)
+
+.bss            0x00800060       0x7c
+                0x00800060                PROVIDE (__bss_start, .)
+ *(.bss)
+ .bss           0x00800060        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/../../../../avr/lib/avr5/crtm16.o
+ .bss           0x00800060        0x0 main.o
+ .bss           0x00800060        0x0 timer.o
+ .bss           0x00800060        0x1 motor.o
+ .bss           0x00800061        0x0 databus.o
+ .bss           0x00800061        0x0 delay.o
+ .bss           0x00800061        0x0 adc.o
+ .bss           0x00800061        0x0 lcd.o
+ .bss           0x00800061        0x0 servo.o
+ .bss           0x00800061        0x2 taskscheduler.o
+                0x00800062                channel
+                0x00800061                task_schedule
+ .bss           0x00800063        0x1 joypad.o
+                0x00800063                D_Flip_Flop
+ .bss           0x00800064        0x0 logic.o
+ .bss           0x00800064        0x0 map.o
+ .bss           0x00800064        0x0 moving.o
+ .bss           0x00800064        0x0 golfer.o
+ .bss           0x00800064        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodqi4.o)
+ .bss           0x00800064        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_udivmodhi4.o)
+ .bss           0x00800064        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_divmodhi4.o)
+ .bss           0x00800064        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_exit.o)
+ .bss           0x00800064        0x0 c:/winavr-20100110/bin/../lib/gcc/avr/4.3.3/avr5\libgcc.a(_clear_bss.o)
+ *(.bss*)
+ *(COMMON)
+ COMMON         0x00800064       0x60 main.o
+                0x00800064                sequence
+                0x00800065                Map
+                0x00800096                VY
+                0x00800097                position_x
+                0x00800098                middle_sensor
+                0x00800099                Map_set
+                0x0080009a                VR
+                0x0080009c                detection_flag
+                0x0080009d                direction
+                0x0080009e                past_front
+                0x0080009f                Ball_left
+                0x008000a0                VX
+                0x008000a1                result_flag
+                0x008000a2                joypad_switch
+                0x008000a3                past_defl
+                0x008000a4                Ball
+                0x008000a5                back_sensor
+                0x008000a6                LCD_menu_update_flag
+                0x008000a7                R_motor_speed
+                0x008000a8                temp_x
+                0x008000a9                position_y
+                0x008000aa                front_sensor
+                0x008000ab                shooted_ball
+                0x008000ac                result
+                0x008000ad                step
+                0x008000ae                pwm_duty
+                0x008000be                past_back
+                0x008000bf                L_motor_speed
+                0x008000c0                LCD_menu_selection
+                0x008000c1                motor_dir
+                0x008000c2                temp_y
+                0x008000c3                IR
+ COMMON         0x008000c4       0x18 lcd.o
+                0x008000c4                lcd_print_data
+                0x008000d4                lcd_binary_data
+                0x008000dc                PROVIDE (__bss_end, .)
+                0x0000280e                __data_load_start = LOADADDR (.data)
+                0x0000280e                __data_load_end = (__data_load_start + SIZEOF (.data))
+
+.noinit         0x008000dc        0x0
+                0x008000dc                PROVIDE (__noinit_start, .)
+ *(.noinit*)
+                0x008000dc                PROVIDE (__noinit_end, .)
+                0x008000dc                _end = .
+                0x008000dc                PROVIDE (__heap_start, .)
+
+.eeprom         0x00810000        0x0
+ *(.eeprom*)
+                0x00810000                __eeprom_end = .
+
+.fuse
+ *(.fuse)
+ *(.lfuse)
+ *(.hfuse)
+ *(.efuse)
+
+.lock
+ *(.lock*)
+
+.signature
+ *(.signature*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment
+ *(.comment)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000      0x1c0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 main.o
+ .debug_aranges
+                0x00000020       0x20 timer.o
+ .debug_aranges
+                0x00000040       0x20 motor.o
+ .debug_aranges
+                0x00000060       0x20 databus.o
+ .debug_aranges
+                0x00000080       0x20 delay.o
+ .debug_aranges
+                0x000000a0       0x20 adc.o
+ .debug_aranges
+                0x000000c0       0x20 lcd.o
+ .debug_aranges
+                0x000000e0       0x20 servo.o
+ .debug_aranges
+                0x00000100       0x20 taskscheduler.o
+ .debug_aranges
+                0x00000120       0x20 joypad.o
+ .debug_aranges
+                0x00000140       0x20 logic.o
+ .debug_aranges
+                0x00000160       0x20 map.o
+ .debug_aranges
+                0x00000180       0x20 moving.o
+ .debug_aranges
+                0x000001a0       0x20 golfer.o
+
+.debug_pubnames
+                0x00000000     0x2393
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000      0x228 main.o
+ .debug_pubnames
+                0x00000228      0x20d timer.o
+ .debug_pubnames
+                0x00000435      0x28a motor.o
+ .debug_pubnames
+                0x000006bf      0x268 databus.o
+ .debug_pubnames
+                0x00000927      0x227 delay.o
+ .debug_pubnames
+                0x00000b4e      0x227 adc.o
+ .debug_pubnames
+                0x00000d75      0x31d lcd.o
+ .debug_pubnames
+                0x00001092      0x35d servo.o
+ .debug_pubnames
+                0x000013ef      0x20c taskscheduler.o
+ .debug_pubnames
+                0x000015fb      0x21e joypad.o
+ .debug_pubnames
+                0x00001819      0x236 logic.o
+ .debug_pubnames
+                0x00001a4f      0x260 map.o
+ .debug_pubnames
+                0x00001caf      0x3ec moving.o
+ .debug_pubnames
+                0x0000209b      0x2f8 golfer.o
+
+.debug_info     0x00000000     0x4d05
+ *(.debug_info)
+ .debug_info    0x00000000      0x402 main.o
+ .debug_info    0x00000402      0x34d timer.o
+ .debug_info    0x0000074f      0x542 motor.o
+ .debug_info    0x00000c91      0x5dd databus.o
+ .debug_info    0x0000126e      0x565 delay.o
+ .debug_info    0x000017d3      0x395 adc.o
+ .debug_info    0x00001b68      0xcad lcd.o
+ .debug_info    0x00002815      0x605 servo.o
+ .debug_info    0x00002e1a      0x3d6 taskscheduler.o
+ .debug_info    0x000031f0      0x53b joypad.o
+ .debug_info    0x0000372b      0x38a logic.o
+ .debug_info    0x00003ab5      0x3cf map.o
+ .debug_info    0x00003e84      0xa1e moving.o
+ .debug_info    0x000048a2      0x463 golfer.o
+ *(.gnu.linkonce.wi.*)
+
+.debug_abbrev   0x00000000      0xed2
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000       0xc9 main.o
+ .debug_abbrev  0x000000c9       0x90 timer.o
+ .debug_abbrev  0x00000159      0x110 motor.o
+ .debug_abbrev  0x00000269      0x175 databus.o
+ .debug_abbrev  0x000003de      0x167 delay.o
+ .debug_abbrev  0x00000545       0xb4 adc.o
+ .debug_abbrev  0x000005f9      0x1f5 lcd.o
+ .debug_abbrev  0x000007ee      0x12b servo.o
+ .debug_abbrev  0x00000919       0xb2 taskscheduler.o
+ .debug_abbrev  0x000009cb      0x146 joypad.o
+ .debug_abbrev  0x00000b11       0xa5 logic.o
+ .debug_abbrev  0x00000bb6       0xc3 map.o
+ .debug_abbrev  0x00000c79      0x168 moving.o
+ .debug_abbrev  0x00000de1       0xf1 golfer.o
+
+.debug_line     0x00000000     0x3a41
+ *(.debug_line)
+ .debug_line    0x00000000      0x1a4 main.o
+ .debug_line    0x000001a4      0x10d timer.o
+ .debug_line    0x000002b1      0x2a0 motor.o
+ .debug_line    0x00000551      0x2aa databus.o
+ .debug_line    0x000007fb      0x229 delay.o
+ .debug_line    0x00000a24      0x18b adc.o
+ .debug_line    0x00000baf      0x701 lcd.o
+ .debug_line    0x000012b0      0x4ad servo.o
+ .debug_line    0x0000175d      0x17a taskscheduler.o
+ .debug_line    0x000018d7      0x28b joypad.o
+ .debug_line    0x00001b62      0xb50 logic.o
+ .debug_line    0x000026b2      0x1fb map.o
+ .debug_line    0x000028ad      0xb1f moving.o
+ .debug_line    0x000033cc      0x675 golfer.o
+
+.debug_frame    0x00000000      0x760
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x40 main.o
+ .debug_frame   0x00000040       0x20 timer.o
+ .debug_frame   0x00000060       0x90 motor.o
+ .debug_frame   0x000000f0       0x60 databus.o
+ .debug_frame   0x00000150       0x40 delay.o
+ .debug_frame   0x00000190       0x40 adc.o
+ .debug_frame   0x000001d0      0x100 lcd.o
+ .debug_frame   0x000002d0      0x160 servo.o
+ .debug_frame   0x00000430       0x20 taskscheduler.o
+ .debug_frame   0x00000450       0x30 joypad.o
+ .debug_frame   0x00000480       0x50 logic.o
+ .debug_frame   0x000004d0       0x60 map.o
+ .debug_frame   0x00000530      0x160 moving.o
+ .debug_frame   0x00000690       0xd0 golfer.o
+
+.debug_str      0x00000000      0xa3b
+ *(.debug_str)
+ .debug_str     0x00000000      0x1ec main.o
+                                0x232 (size before relaxing)
+ .debug_str     0x000001ec       0x17 timer.o
+                                0x220 (size before relaxing)
+ .debug_str     0x00000203       0x97 motor.o
+                                0x2a0 (size before relaxing)
+ .debug_str     0x0000029a       0xda databus.o
+                                0x2e8 (size before relaxing)
+ .debug_str     0x00000374       0x22 delay.o
+                                0x2aa (size before relaxing)
+ .debug_str     0x00000396       0x30 adc.o
+                                0x239 (size before relaxing)
+ .debug_str     0x000003c6      0x11c lcd.o
+                                0x3a2 (size before relaxing)
+ .debug_str     0x000004e2      0x120 servo.o
+                                0x329 (size before relaxing)
+ .debug_str     0x00000602       0x1e taskscheduler.o
+                                0x227 (size before relaxing)
+ .debug_str     0x00000620       0x55 joypad.o
+                                0x2c6 (size before relaxing)
+ .debug_str     0x00000675       0x34 logic.o
+                                0x23d (size before relaxing)
+ .debug_str     0x000006a9       0x58 map.o
+                                0x261 (size before relaxing)
+ .debug_str     0x00000701      0x263 moving.o
+                                0x47f (size before relaxing)
+ .debug_str     0x00000964       0xd7 golfer.o
+                                0x2eb (size before relaxing)
+
+.debug_loc      0x00000000      0xb83
+ *(.debug_loc)
+ .debug_loc     0x00000000      0x121 motor.o
+ .debug_loc     0x00000121       0x39 databus.o
+ .debug_loc     0x0000015a      0x3a3 lcd.o
+ .debug_loc     0x000004fd       0x78 servo.o
+ .debug_loc     0x00000575       0x47 joypad.o
+ .debug_loc     0x000005bc      0x5a9 moving.o
+ .debug_loc     0x00000b65       0x1e golfer.o
+
+.debug_macinfo
+ *(.debug_macinfo)
+OUTPUT(RoboGolfer.elf elf32-avr)
+LOAD linker stubs
+
+.debug_ranges   0x00000000      0x108
+ .debug_ranges  0x00000000       0x78 delay.o
+ .debug_ranges  0x00000078       0x48 lcd.o
+ .debug_ranges  0x000000c0       0x48 joypad.o
